@@ -8,7 +8,6 @@ class GymtrackerApplicationTests {
 
 	@Test
 	void contextLoads() {
-		//testing branch
 	}
 
 }
