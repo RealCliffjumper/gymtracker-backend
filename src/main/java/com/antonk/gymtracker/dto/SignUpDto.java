@@ -1,4 +1,4 @@
 package com.antonk.gymtracker.dto;
 
-public record SignUpDto(String userLoginId, String userFirstName, String userLastName, String userPassword) {
+public record SignUpDto(String userLoginId, String userFirstName, String userLastName, String password) {
 }
