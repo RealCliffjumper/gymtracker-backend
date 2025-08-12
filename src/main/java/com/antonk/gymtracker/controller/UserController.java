@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("")
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 class UserController {
@@ -18,7 +18,7 @@ class UserController {
     private UserService userService;
 
     @PostMapping(path = "/registration")
-    public ResponseEntity<User> signUp(@RequestBody SignUpDto signUpDto) {
+    public ResponseEntity<User> signUpUser(@RequestBody SignUpDto signUpDto) {
         User user = userService.signUpUser(signUpDto);
         return ResponseEntity.ok(user);
     }
