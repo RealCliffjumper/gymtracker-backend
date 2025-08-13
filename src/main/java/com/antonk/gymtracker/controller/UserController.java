@@ -1,5 +1,7 @@
 package com.antonk.gymtracker.controller;
 
+import com.antonk.gymtracker.JWT.JWTTokenProvider;
+import com.antonk.gymtracker.dto.JWTDto;
 import com.antonk.gymtracker.dto.LoginDto;
 import com.antonk.gymtracker.dto.SignUpDto;
 import com.antonk.gymtracker.entity.User;
@@ -10,22 +12,24 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("")
+@RequestMapping("api")
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 class UserController {
 
     private UserService userService;
+    private JWTTokenProvider jwtTokenProvider;
 
-    @PostMapping(path = "/registration")
+    @PostMapping(path = "auth/registration")
     public ResponseEntity<User> signUpUser(@RequestBody SignUpDto signUpDto) {
         User user = userService.signUpUser(signUpDto);
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping(path = "/login")
-    public ResponseEntity<User> loginUser(@RequestBody LoginDto loginDto) {
+    @PostMapping(path = "auth/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto) {
         User user = userService.loginUser(loginDto);
-        return ResponseEntity.ok(user);
+        String token = jwtTokenProvider.generateToken(user);
+        return ResponseEntity.ok(new JWTDto(user, token));
     }
 }
