@@ -14,16 +14,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 class UserController {
 
     private UserService userService;
     private JWTTokenProvider jwtTokenProvider;
 
     @PostMapping(path = "auth/registration")
-    public ResponseEntity<User> signUpUser(@RequestBody SignUpDto signUpDto) {
+    public ResponseEntity<?> signUpUser(@RequestBody SignUpDto signUpDto) {
         User user = userService.signUpUser(signUpDto);
-        return ResponseEntity.ok(user);
+        String token = jwtTokenProvider.generateToken(user);
+        return ResponseEntity.ok(new JWTDto(user, token));
     }
 
     @PostMapping(path = "auth/login")
