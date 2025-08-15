@@ -44,10 +44,12 @@ public class User implements UserDetails{
     public User(String userFirstName,
                 String userLastName,
                 String userLoginId,
-                String password) {
+                String password,
+                LocalDateTime createdAt) {
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.userLoginId = userLoginId;
         this.password = password;
+        this.createdAt = LocalDateTime.now();
     }
 }

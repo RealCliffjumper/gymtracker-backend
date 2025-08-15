@@ -8,7 +8,6 @@ import com.antonk.gymtracker.repository.UserRepository;
 import com.antonk.gymtracker.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.CharBuffer;
-import java.util.ArrayList;
-import java.util.Collection;
 
 @Service
 @AllArgsConstructor
@@ -38,7 +35,8 @@ class UserServiceImpl implements UserService, UserDetailsService {
                 signUpDto.userFirstName(),
                 signUpDto.userLastName(),
                 signUpDto.userLoginId(),
-                signUpDto.password()
+                signUpDto.password(),
+                signUpDto.createdAt()
         );
         if(userRepository.findByUserLoginId(signUpDto.userLoginId()).isPresent()) {
             throw new AppException("Username already exists",  HttpStatus.CONFLICT);
