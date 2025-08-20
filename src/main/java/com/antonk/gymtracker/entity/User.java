@@ -6,7 +6,6 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.UUID;
@@ -28,7 +27,7 @@ public class User implements UserDetails{
     private String password;
     private LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
-    private UnitPreference unitPreference = UnitPreference.Kg; //kg, lbs
+    private UnitPreference unitPreference;//kg, lbs
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){
@@ -45,11 +44,13 @@ public class User implements UserDetails{
                 String userLastName,
                 String userLoginId,
                 String password,
-                LocalDateTime createdAt) {
+                LocalDateTime createdAt,
+                UnitPreference unitPreference) {
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.userLoginId = userLoginId;
         this.password = password;
         this.createdAt = LocalDateTime.now();
+        this.unitPreference = UnitPreference.KG;
     }
 }
