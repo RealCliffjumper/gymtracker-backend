@@ -5,6 +5,7 @@ import com.antonk.gymtracker.dto.*;
 import com.antonk.gymtracker.entity.User;
 import com.antonk.gymtracker.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,20 +34,25 @@ class UserController {
         return ResponseEntity.ok(new JWTDto(user, token));
     }
 
-    @PutMapping("user/{id}")
+    @PutMapping("user/{userId}")
     public ResponseEntity<User> updateUser(
-            @PathVariable UUID id,
+            @PathVariable UUID userId,
             @RequestBody UpdateUserDto dto
     ) {
-        User updated = userService.updateUser(id, dto);
+        User updated = userService.updateUser(userId, dto);
         return ResponseEntity.ok(updated);
     }
 
-    @PutMapping("/user/{id}/password")
-    public ResponseEntity<?> changePassword(@PathVariable UUID id,
+    @PutMapping("/user/{userId}/password")
+    public ResponseEntity<?> changePassword(@PathVariable UUID userId,
                                             @RequestBody PasswordChangeDto dto) {
-        userService.changePassword(id, dto);
+        userService.changePassword(userId, dto);
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping(path = "user/delete/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable("userId") UUID userId){
+        userService.deleteUser(userId);
+    }
 }

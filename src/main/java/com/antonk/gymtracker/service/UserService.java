@@ -15,7 +15,9 @@ public interface UserService {
 
     User loginUser(@RequestBody LoginDto loginDto);
 
-    User updateUser(UUID id, UpdateUserDto userDto);
+    User updateUser(UUID userId, UpdateUserDto userDto);
 
-    void changePassword(UUID id, @RequestBody PasswordChangeDto passwordChangeDto);
+    void changePassword(UUID userId, @RequestBody PasswordChangeDto passwordChangeDto);
+
+    void deleteUser(UUID userId);
 }

@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.CharBuffer;
 import java.util.UUID;
 
 @Service
@@ -60,10 +59,11 @@ class UserServiceImpl implements UserService, UserDetailsService {
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
 
+    @Transactional
     @Override
-    public User updateUser(UUID id, UpdateUserDto dto) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public User updateUser(UUID userId, UpdateUserDto dto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
 
         user.setUserFirstName(dto.userFirstName());
         user.setUserLastName(dto.userLastName());
@@ -76,10 +76,11 @@ class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public void changePassword(UUID userId, PasswordChangeDto passwordChangeDto) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
 
 
         // check if old password matches
@@ -89,8 +90,12 @@ class UserServiceImpl implements UserService, UserDetailsService {
             userRepository.save(user);
 
         } else{
-            throw new RuntimeException("Old password is incorrect" + " " + passwordChangeDto.oldPassword() + " " + user.getPassword());
+            throw new AppException("Old password is incorrect",  HttpStatus.BAD_REQUEST);
         }
+    }
 
+    @Override
+    public void deleteUser(UUID userId){
+        userRepository.deleteById(userId);
     }
 }
