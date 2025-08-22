@@ -10,6 +10,7 @@ import com.antonk.gymtracker.repository.UserRepository;
 import com.antonk.gymtracker.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -71,6 +73,12 @@ class UserServiceImpl implements UserService, UserDetailsService {
 
         if (dto.unitPreference() != null) {
             user.setUnitPreference(dto.unitPreference());
+        }
+
+        if (Objects.equals(user.getUserFirstName(), dto.userFirstName()) &&
+                Objects.equals(user.getUserLastName(), dto.userLastName()) &&
+                Objects.equals(user.getUserLoginId(), dto.userLoginId())) {
+            throw new AppException("No changes detected", HttpStatus.NOT_MODIFIED);
         }
 
         return userRepository.save(user);
