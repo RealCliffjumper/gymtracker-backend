@@ -91,6 +91,21 @@ class UserControllerIntegrationTest {
     @Test
     @Sql(scripts = "/insert-user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/delete-user.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void updateUser_onNoUpdate_returns304() throws Exception {
+        User user = userRepository.findByUserLoginId("test@example.com").orElseThrow();
+        UUID userId = user.getUserId();
+
+        UpdateUserDto updateDto = new UpdateUserDto(user.getUserLoginId(), user.getUserFirstName(), user.getUserLastName(), user.getUnitPreference());
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/user/" + userId)
+                        .content(objectMapper.writeValueAsString(updateDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotModified())
+                .andExpect(jsonPath("$.message").value("No changes were made"));
+    }
+
+    @Test
+    @Sql(scripts = "/insert-user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/delete-user.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void changePassword_success_returnsTrueOnEncoderMatch() throws Exception {
 
         User user = userRepository.findByUserLoginId("test@example.com").orElseThrow();

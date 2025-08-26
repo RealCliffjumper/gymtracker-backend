@@ -78,7 +78,7 @@ class UserServiceImpl implements UserService, UserDetailsService {
         if (Objects.equals(user.getUserFirstName(), dto.userFirstName()) &&
                 Objects.equals(user.getUserLastName(), dto.userLastName()) &&
                 Objects.equals(user.getUserLoginId(), dto.userLoginId())) {
-            throw new AppException("No changes detected", HttpStatus.NOT_MODIFIED);
+            throw new AppException("No changes were made", HttpStatus.NOT_MODIFIED);
         }
 
         return userRepository.save(user);
