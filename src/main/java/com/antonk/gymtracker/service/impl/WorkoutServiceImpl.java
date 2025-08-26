@@ -52,7 +52,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         if (Objects.equals(workout.getWorkoutName(), updateWorkoutDto.workoutName()) &&
                 Objects.equals(workout.getWorkoutDescription(), updateWorkoutDto.workoutDescription())) {
-            throw new AppException("No changes detected", HttpStatus.NOT_MODIFIED);
+            throw new AppException("No changes were made", HttpStatus.NOT_MODIFIED);
         }
 
         return workoutRepository.save(workout);
