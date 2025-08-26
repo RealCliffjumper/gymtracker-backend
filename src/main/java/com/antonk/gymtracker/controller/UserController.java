@@ -4,6 +4,7 @@ import com.antonk.gymtracker.JWT.JWTTokenProvider;
 import com.antonk.gymtracker.dto.*;
 import com.antonk.gymtracker.entity.User;
 import com.antonk.gymtracker.service.UserService;
+import com.antonk.gymtracker.service.WorkoutService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.UUID;
 class UserController {
 
     private UserService userService;
+    private WorkoutService workoutService;
     private JWTTokenProvider jwtTokenProvider;
 
     @PostMapping(path = "auth/registration")
@@ -53,6 +55,7 @@ class UserController {
     @DeleteMapping(path = "user/delete/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable("userId") UUID userId){
+        workoutService.deleteAllUserWorkouts(userId);
         userService.deleteUser(userId);
     }
 }
