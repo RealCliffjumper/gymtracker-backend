@@ -67,6 +67,11 @@ class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
 
+        boolean noChanges = Objects.equals(user.getUserFirstName(), dto.userFirstName()) &&
+                Objects.equals(user.getUserLastName(), dto.userLastName()) &&
+                Objects.equals(user.getUserLoginId(), dto.userLoginId()) &&
+                Objects.equals(user.getUnitPreference(), dto.unitPreference());
+
         user.setUserFirstName(dto.userFirstName());
         user.setUserLastName(dto.userLastName());
         user.setUserLoginId(dto.userLoginId());
@@ -75,10 +80,8 @@ class UserServiceImpl implements UserService, UserDetailsService {
             user.setUnitPreference(dto.unitPreference());
         }
 
-        if (Objects.equals(user.getUserFirstName(), dto.userFirstName()) &&
-                Objects.equals(user.getUserLastName(), dto.userLastName()) &&
-                Objects.equals(user.getUserLoginId(), dto.userLoginId())) {
-            throw new AppException("No changes detected", HttpStatus.NOT_MODIFIED);
+        if (noChanges) {
+            throw new AppException("No changes were made", HttpStatus.NOT_MODIFIED);
         }
 
         return userRepository.save(user);
