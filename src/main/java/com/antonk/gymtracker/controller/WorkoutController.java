@@ -1,6 +1,9 @@
 package com.antonk.gymtracker.controller;
 
+import com.antonk.gymtracker.dto.UpdateUserDto;
+import com.antonk.gymtracker.dto.UpdateWorkoutDto;
 import com.antonk.gymtracker.dto.WorkoutDto;
+import com.antonk.gymtracker.entity.User;
 import com.antonk.gymtracker.entity.Workout;
 import com.antonk.gymtracker.service.WorkoutService;
 import lombok.AllArgsConstructor;
@@ -28,6 +31,15 @@ class WorkoutController {
     @GetMapping(path = "{userId}/all")
     public List<Workout> getWorkouts(@PathVariable UUID userId) {
         return workoutService.getUserWorkouts(userId);
+    }
+
+    @PutMapping("{workoutId}/update")
+    public ResponseEntity<Workout> updateWorkout(
+            @PathVariable UUID workoutId,
+            @RequestBody UpdateWorkoutDto dto
+    ) {
+        Workout updated = workoutService.updateWorkout(workoutId, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping(path = "{workoutId}/delete")
