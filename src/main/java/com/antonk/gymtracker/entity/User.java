@@ -7,7 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -28,6 +30,8 @@ public class User implements UserDetails{
     private LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
     private UnitPreference unitPreference;//kg, lbs
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){
