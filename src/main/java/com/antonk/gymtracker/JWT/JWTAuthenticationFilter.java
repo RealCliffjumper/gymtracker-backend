@@ -38,6 +38,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             } catch (JWTVerificationException e) {
                 // Token invalid — clear context
                 SecurityContextHolder.clearContext();
+                return;
             }
         }
 

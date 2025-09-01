@@ -16,12 +16,13 @@ import org.springframework.stereotype.Component;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
 public class JWTTokenProvider {
 
-    @Value("${security.jwt.token.secret-key:secret-key}")
+    @Value("${security.jwt.token.secret-key:secret-key}") //this will be changed in the future
     private String secretKey;
 
     @PostConstruct
@@ -37,6 +38,7 @@ public class JWTTokenProvider {
                 .withIssuer(user.getUserLoginId())
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
+                .withClaim("userId", user.getUserId().toString())
                 .withClaim("firstName", user.getUserFirstName())
                 .withClaim("lastName", user.getUserLastName())
                 .sign(Algorithm.HMAC256(secretKey));
@@ -51,6 +53,7 @@ public class JWTTokenProvider {
 
         User user = User.builder()
                 .userLoginId(jwt.getIssuer())
+                .userId(UUID.fromString(jwt.getClaim("userId").asString()))
                 .userFirstName(jwt.getClaim("firstName").asString())
                 .userLastName(jwt.getClaim("lastName").asString())
                 .build();
