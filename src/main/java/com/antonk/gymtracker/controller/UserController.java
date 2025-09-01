@@ -8,6 +8,7 @@ import com.antonk.gymtracker.service.WorkoutService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -36,7 +37,13 @@ class UserController {
         return ResponseEntity.ok(new JWTDto(user, token));
     }
 
-    @PutMapping("user/{userId}")
+    @GetMapping(path = "user/get")
+    public ResponseEntity<UserFetchDto> getCurrentUser(@AuthenticationPrincipal User user) {
+        UserFetchDto userDto = userService.getUserByUserId(user.getUserId());
+        return ResponseEntity.ok(userDto);
+    }
+
+    @PutMapping(path = "user/{userId}")
     public ResponseEntity<User> updateUser(
             @PathVariable UUID userId,
             @RequestBody UpdateUserDto dto

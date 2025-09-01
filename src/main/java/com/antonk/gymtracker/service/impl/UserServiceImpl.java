@@ -1,16 +1,12 @@
 package com.antonk.gymtracker.service.impl;
 
-import com.antonk.gymtracker.dto.LoginDto;
-import com.antonk.gymtracker.dto.PasswordChangeDto;
-import com.antonk.gymtracker.dto.SignUpDto;
-import com.antonk.gymtracker.dto.UpdateUserDto;
+import com.antonk.gymtracker.dto.*;
 import com.antonk.gymtracker.entity.User;
 import com.antonk.gymtracker.exception.AppException;
 import com.antonk.gymtracker.repository.UserRepository;
 import com.antonk.gymtracker.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,6 +27,12 @@ class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String userLoginId) throws UsernameNotFoundException {
         return this.userRepository.findByUserLoginId(userLoginId)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+    }
+
+    public UserFetchDto getUserByUserId(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
+        return new UserFetchDto(user.getUserId(), user.getUserFirstName(), user.getUserLastName(), user.getUserLoginId(), user.getUnitPreference());
     }
 
     @Transactional
@@ -67,6 +69,11 @@ class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
 
+        boolean noChanges = Objects.equals(user.getUserFirstName(), dto.userFirstName()) &&
+                Objects.equals(user.getUserLastName(), dto.userLastName()) &&
+                Objects.equals(user.getUserLoginId(), dto.userLoginId()) &&
+                Objects.equals(user.getUnitPreference(), dto.unitPreference());
+
         user.setUserFirstName(dto.userFirstName());
         user.setUserLastName(dto.userLastName());
         user.setUserLoginId(dto.userLoginId());
@@ -75,9 +82,7 @@ class UserServiceImpl implements UserService, UserDetailsService {
             user.setUnitPreference(dto.unitPreference());
         }
 
-        if (Objects.equals(user.getUserFirstName(), dto.userFirstName()) &&
-                Objects.equals(user.getUserLastName(), dto.userLastName()) &&
-                Objects.equals(user.getUserLoginId(), dto.userLoginId())) {
+        if (noChanges) {
             throw new AppException("No changes were made", HttpStatus.NOT_MODIFIED);
         }
 
