@@ -28,6 +28,8 @@ public class WorkoutServiceImpl implements WorkoutService {
         return workoutRepository.findByUserId(userId);
     }
 
+    public Workout getWorkoutById(UUID workoutId) {return workoutRepository.findById(workoutId).orElse(null);}
+
     @Transactional
     @Override
     public Workout createWorkout(UUID userId, WorkoutDto workoutDto) {
@@ -37,6 +39,7 @@ public class WorkoutServiceImpl implements WorkoutService {
                 workoutDto.createdAt()
         );
         workout.setUserId(userId);
+        workout.setUpdatedAt(LocalDateTime.now());
         return workoutRepository.save(workout);
     }
 
@@ -46,12 +49,14 @@ public class WorkoutServiceImpl implements WorkoutService {
         Workout workout = workoutRepository.findById(workoutId)
                 .orElseThrow(() -> new AppException("Workout not found", HttpStatus.NOT_FOUND));
 
+        boolean noChanges = Objects.equals(workout.getWorkoutName(), updateWorkoutDto.workoutName()) &&
+                Objects.equals(workout.getWorkoutDescription(), updateWorkoutDto.workoutDescription());
+
         workout.setWorkoutName(updateWorkoutDto.workoutName());
         workout.setWorkoutDescription(updateWorkoutDto.workoutDescription());
         workout.setUpdatedAt(LocalDateTime.now());
 
-        if (Objects.equals(workout.getWorkoutName(), updateWorkoutDto.workoutName()) &&
-                Objects.equals(workout.getWorkoutDescription(), updateWorkoutDto.workoutDescription())) {
+        if (noChanges) {
             throw new AppException("No changes were made", HttpStatus.NOT_MODIFIED);
         }
 
@@ -66,6 +71,8 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public void deleteWorkout(UUID workoutId) {
-        workoutRepository.deleteById(workoutId);
+        Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new AppException("Workout not found", HttpStatus.NOT_FOUND));
+        workoutRepository.deleteById(workout.getWorkoutId());
     }
 }

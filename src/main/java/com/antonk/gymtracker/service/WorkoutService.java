@@ -11,6 +11,8 @@ public interface WorkoutService {
 
     List<Workout> getUserWorkouts(UUID userId);
 
+    Workout getWorkoutById(UUID workoutId);
+
     Workout createWorkout(UUID userId, WorkoutDto workoutDto);
 
     Workout updateWorkout(UUID workoutId, UpdateWorkoutDto updateWorkoutDto);

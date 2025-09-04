@@ -33,6 +33,9 @@ class WorkoutController {
         return workoutService.getUserWorkouts(userId);
     }
 
+    @GetMapping(path = "{workoutId}/find")
+    public Workout getWorkout(@PathVariable UUID workoutId) {return workoutService.getWorkoutById(workoutId);}
+
     @PutMapping("{workoutId}/update")
     public ResponseEntity<Workout> updateWorkout(
             @PathVariable UUID workoutId,
@@ -42,7 +45,7 @@ class WorkoutController {
         return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping(path = "{workoutId}/delete")
+    @DeleteMapping(path = "delete/{workoutId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void  deleteWorkout(@PathVariable UUID workoutId) {
         workoutService.deleteWorkout(workoutId);
