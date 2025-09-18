@@ -34,7 +34,9 @@ class WorkoutController {
     }
 
     @GetMapping(path = "{workoutId}/find")
-    public Workout getWorkout(@PathVariable UUID workoutId) {return workoutService.getWorkoutById(workoutId);}
+    public Workout getWorkout(@PathVariable UUID workoutId) {
+        return workoutService.getWorkoutById(workoutId);
+    }
 
     @PutMapping("{workoutId}/update")
     public ResponseEntity<Workout> updateWorkout(
