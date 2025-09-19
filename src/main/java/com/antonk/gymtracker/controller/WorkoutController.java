@@ -5,6 +5,7 @@ import com.antonk.gymtracker.dto.UpdateWorkoutDto;
 import com.antonk.gymtracker.dto.WorkoutDto;
 import com.antonk.gymtracker.entity.User;
 import com.antonk.gymtracker.entity.Workout;
+import com.antonk.gymtracker.service.WorkoutExerciseService;
 import com.antonk.gymtracker.service.WorkoutService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ import java.util.UUID;
 class WorkoutController {
 
     private WorkoutService workoutService;
+
+    private WorkoutExerciseService workoutExerciseService;
 
     @PostMapping(path = "{userId}/create")
     public ResponseEntity<?> createWorkout(@PathVariable UUID userId, @RequestBody WorkoutDto workoutDto) {
@@ -50,6 +53,7 @@ class WorkoutController {
     @DeleteMapping(path = "delete/{workoutId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void  deleteWorkout(@PathVariable UUID workoutId) {
+        workoutExerciseService.deleteAllWorkoutExercises(workoutId);
         workoutService.deleteWorkout(workoutId);
     }
 }
