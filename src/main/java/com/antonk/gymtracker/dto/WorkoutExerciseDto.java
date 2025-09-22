@@ -9,5 +9,6 @@ public record WorkoutExerciseDto(UUID workoutExerciseId,
                                  UUID exerciseId,
                                  int exerciseOrder,
                                  String exerciseName,
-                                 List<WorkoutSetDto> sets) {
+                                 List<WorkoutSetDto> sets,
+                                 UUID supersetGroupId) {
 }

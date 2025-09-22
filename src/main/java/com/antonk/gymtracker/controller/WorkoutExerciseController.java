@@ -43,6 +43,8 @@ class WorkoutExerciseController {
         return ResponseEntity.ok(workoutExerciseService.updateWorkoutExercise(workoutExerciseId, updatedSets));
     }
 
+
+
     @PutMapping("/{workoutId}/reorder")
     public ResponseEntity<?> reorderExercises(
             @PathVariable UUID workoutId,
@@ -54,6 +56,11 @@ class WorkoutExerciseController {
     @PutMapping("/superset")
     public void supersetWorkoutExercise(@RequestBody SupersetRequest supersetRequest){
         workoutExerciseService.updateWorkoutExerciseSupersetGroup(supersetRequest.id1(), supersetRequest.id2());
+    }
+
+    @PutMapping("/superset/remove")
+    public void removeSupersetWorkoutExercise(@RequestBody SupersetRequest supersetRequest){
+        workoutExerciseService.removeWorkoutExerciseSupersetGroup(supersetRequest.id1(), supersetRequest.id2());
     }
 
     @DeleteMapping("/delete/{workoutExerciseId}")

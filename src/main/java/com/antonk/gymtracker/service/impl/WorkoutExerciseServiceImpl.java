@@ -53,7 +53,8 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseService {
                 we.getExerciseId(),
                 we.getExerciseOrder(),
                 exerciseName,
-                sets
+                sets,
+                we.getSupersetGroupId()
         );
     }
 
@@ -158,6 +159,20 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseService {
         workoutExerciseRepository.save(workoutExercise2);
     }
 
+    public void removeWorkoutExerciseSupersetGroup(UUID workoutExerciseId1, UUID workoutExerciseId2) {
+        WorkoutExercise workoutExercise1 = workoutExerciseRepository.findById(workoutExerciseId1).
+                orElseThrow(() -> new AppException("Workout not found", HttpStatus.NOT_FOUND));
+
+        WorkoutExercise workoutExercise2 = workoutExerciseRepository.findById(workoutExerciseId2).
+                orElseThrow(() -> new AppException("Workout not found", HttpStatus.NOT_FOUND));
+
+        workoutExercise1.setSupersetGroupId(null);
+        workoutExercise2.setSupersetGroupId(null);
+
+        workoutExerciseRepository.save(workoutExercise1);
+        workoutExerciseRepository.save(workoutExercise2);
+    }
+
     public void deleteAllWorkoutExercises(UUID workoutId){
         List<WorkoutExercise> workoutExercises = workoutExerciseRepository.findByWorkoutId(workoutId);
         workoutExerciseRepository.deleteAll(workoutExercises);
@@ -166,7 +181,17 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseService {
     public void deleteWorkoutExercise(UUID workoutExerciseId){
         WorkoutExercise workoutExercise = workoutExerciseRepository.findById(workoutExerciseId).
                 orElseThrow(() -> new AppException("Workout exercise not found", HttpStatus.NOT_FOUND));
+        UUID workoutId = workoutExercise.getWorkoutId();
 
-        workoutExerciseRepository.deleteById(workoutExercise.getWorkoutExerciseId());
+        workoutExerciseRepository.delete(workoutExercise);
+
+        List<WorkoutExercise> remaining =
+                workoutExerciseRepository.findByWorkoutIdOrderByExerciseOrderAsc(workoutId);
+
+        for (int i = 0; i < remaining.size(); i++) {
+            remaining.get(i).setExerciseOrder(i);
+        }
+
+        workoutExerciseRepository.saveAll(remaining);
     }
 }

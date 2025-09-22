@@ -23,6 +23,8 @@ public interface WorkoutExerciseService {
 
     void updateWorkoutExerciseSupersetGroup(UUID workoutExerciseId1, UUID workoutExerciseId2);
 
+    void removeWorkoutExerciseSupersetGroup(UUID workoutExerciseId1, UUID workoutExerciseId2);
+
     void deleteAllWorkoutExercises(UUID workoutId);
 
     void deleteWorkoutExercise(UUID workoutExerciseId);
