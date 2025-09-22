@@ -52,19 +52,10 @@ public class ExerciseServiceImpl implements ExerciseService {
         Exercise exercise = exerciseRepository.findById(exerciseId)
                 .orElseThrow(() -> new AppException("Exercise not found", HttpStatus.NOT_FOUND));
 
-        boolean noChanges = Objects.equals(exercise.getExerciseName(), exerciseDto.exerciseName()) && //change later no changes is handled on frontend
-                Objects.equals(exercise.getExerciseDescription(), exerciseDto.exerciseDescription()) &&
-                Objects.equals(exercise.getMuscleGroup(), exerciseDto.muscleGroup()) &&
-                Objects.equals(exercise.getEquipment(), exerciseDto.equipment());
-
         exercise.setExerciseName(exerciseDto.exerciseName());
         exercise.setExerciseDescription(exerciseDto.exerciseDescription());
         exercise.setMuscleGroup(exerciseDto.muscleGroup());
         exercise.setEquipment(exerciseDto.equipment());
-
-        if (noChanges) {
-            throw new AppException("No changes were made", HttpStatus.NOT_MODIFIED);
-        }
 
         return exerciseRepository.save(exercise);
     }
