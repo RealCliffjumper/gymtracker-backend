@@ -45,8 +45,8 @@ class WorkoutControllerTest {
 
     @Test
     @Sql(scripts = "/insert-user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "/delete-user.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Sql(scripts = "/delete-workout.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = "/delete-user.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void createWorkout_shouldReturn_newWorkout() throws Exception {
         User user = userRepository.findByUserLoginId("test@example.com").orElseThrow();
         UUID userId = user.getUserId();
