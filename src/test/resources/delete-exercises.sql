@@ -1,0 +1,1 @@
+DELETE FROM exercises WHERE exercise_name LIKE '%intTest%';
