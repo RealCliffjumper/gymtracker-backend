@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -59,7 +58,7 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseService {
     }
 
     public List<WorkoutExerciseDto> getWorkoutExercises(UUID workoutId) {
-        List<WorkoutExercise> workoutExercises = workoutExerciseRepository.findByWorkoutIdOrderByExerciseOrderAsc(workoutId); //sorted by order list
+        List<WorkoutExercise> workoutExercises = workoutExerciseRepository.findByWorkout_WorkoutIdOrderByExerciseOrderAsc(workoutId);
         return workoutExercises.stream()
                 .map(this::mapToDto)
                 .toList();
@@ -72,11 +71,13 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseService {
 
     @Transactional
     public WorkoutExercise createWorkoutExercise(UUID workoutId, WorkoutExerciseReq req){
-        WorkoutExercise lastWorkoutExercise = workoutExerciseRepository.findFirstByWorkoutIdOrderByExerciseOrderDesc(workoutId);
+        WorkoutExercise lastWorkoutExercise = workoutExerciseRepository.findFirstByWorkout_WorkoutIdOrderByExerciseOrderDesc(workoutId);
+        Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new AppException("Workout not found", HttpStatus.NOT_FOUND));
 
         WorkoutExercise workoutExercise = WorkoutExercise.builder()
                 .exerciseId(req.exerciseId())
-                .workoutId(workoutId)
+                .workout(workout)
                 .exerciseOrder(lastWorkoutExercise != null ? lastWorkoutExercise.getExerciseOrder() + 1 : 0)
                 .build();
 
@@ -91,14 +92,11 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseService {
                 .toList();
 
         workoutExercise.setSets(sets);
+        workoutExercise.setExerciseId(req.exerciseId());
 
-        Workout workout = workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new AppException("Workout not found", HttpStatus.NOT_FOUND));
         workout.setUpdatedAt(LocalDateTime.now());
         workoutRepository.save(workout);
 
-        workoutExercise.setWorkoutId(workoutId);
-        workoutExercise.setExerciseId(req.exerciseId());
         return workoutExerciseRepository.save(workoutExercise);
     }
 
@@ -111,7 +109,7 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseService {
 
         List<WorkoutSet> sets = updatedSets.stream()
                 .map(dto -> WorkoutSet.builder()
-                        .workoutExercise(workoutExercise) // important: set back-reference
+                        .workoutExercise(workoutExercise)
                         .setNumber(dto.setNumber())
                         .reps(dto.reps())
                         .weight(dto.weight())
@@ -127,7 +125,7 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseService {
 
 
     public void updateWorkoutExerciseOrder(UUID workoutId, List<WorkoutExerciseOrderDto> dto){
-        List<WorkoutExercise> exercises = workoutExerciseRepository.findByWorkoutIdOrderByExerciseOrderAsc(workoutId);
+        List<WorkoutExercise> exercises = workoutExerciseRepository.findByWorkout_WorkoutIdOrderByExerciseOrderAsc(workoutId);
 
         Map<UUID, Integer> newOrderMap = dto.stream()
                 .collect(Collectors.toMap(WorkoutExerciseOrderDto::workoutExerciseId,
@@ -174,19 +172,19 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseService {
     }
 
     public void deleteAllWorkoutExercises(UUID workoutId){
-        List<WorkoutExercise> workoutExercises = workoutExerciseRepository.findByWorkoutId(workoutId);
+        List<WorkoutExercise> workoutExercises = workoutExerciseRepository.findByWorkout_WorkoutId(workoutId);
         workoutExerciseRepository.deleteAll(workoutExercises);
     }
 
     public void deleteWorkoutExercise(UUID workoutExerciseId){
         WorkoutExercise workoutExercise = workoutExerciseRepository.findById(workoutExerciseId).
                 orElseThrow(() -> new AppException("Workout exercise not found", HttpStatus.NOT_FOUND));
-        UUID workoutId = workoutExercise.getWorkoutId();
+        Workout workout = workoutExercise.getWorkout();
 
         workoutExerciseRepository.delete(workoutExercise);
 
         List<WorkoutExercise> remaining =
-                workoutExerciseRepository.findByWorkoutIdOrderByExerciseOrderAsc(workoutId);
+                workoutExerciseRepository.findByWorkout_WorkoutIdOrderByExerciseOrderAsc(workout.getWorkoutId());
 
         for (int i = 0; i < remaining.size(); i++) {
             remaining.get(i).setExerciseOrder(i);

@@ -8,9 +8,9 @@ import java.util.UUID;
 
 public interface WorkoutExerciseRepository extends JpaRepository<WorkoutExercise, UUID> {
 
-    List<WorkoutExercise> findByWorkoutIdOrderByExerciseOrderAsc(UUID workoutId);
+    List<WorkoutExercise> findByWorkout_WorkoutIdOrderByExerciseOrderAsc(UUID workoutId);
 
-    WorkoutExercise findFirstByWorkoutIdOrderByExerciseOrderDesc(UUID workoutId);
+    WorkoutExercise findFirstByWorkout_WorkoutIdOrderByExerciseOrderDesc(UUID workoutId);
 
-    List<WorkoutExercise> findByWorkoutId(UUID workoutId);
+    List<WorkoutExercise> findByWorkout_WorkoutId(UUID workoutId);
 }
