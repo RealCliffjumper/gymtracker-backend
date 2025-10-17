@@ -23,7 +23,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public List<Exercise> getUserExercises(UUID exerciseId){
-        return exerciseRepository.findByUserId(exerciseId);
+        return exerciseRepository.findByUserIdOrderByExerciseNameAsc(exerciseId);
     }
 
     public Exercise getExerciseById(UUID exerciseId){
@@ -31,7 +31,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     public List<Exercise> getExercises(){
-        return exerciseRepository.findAll();
+        return exerciseRepository.findAllByIsPublicIsTrueOrderByExerciseNameAsc();
     }
 
     @Transactional

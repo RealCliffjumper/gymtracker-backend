@@ -9,4 +9,8 @@ import java.util.UUID;
 public interface ExerciseRepository extends JpaRepository<Exercise, UUID> {
 
     List<Exercise> findByUserId(UUID userId);
+
+    List<Exercise> findAllByIsPublicIsTrueOrderByExerciseNameAsc();
+
+    List<Exercise> findByUserIdOrderByExerciseNameAsc(UUID userId);
 }
