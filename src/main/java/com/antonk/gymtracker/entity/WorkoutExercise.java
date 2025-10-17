@@ -1,5 +1,6 @@
 package com.antonk.gymtracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,8 +25,9 @@ public class WorkoutExercise {
     @Column(name = "exercise_id")
     private UUID exerciseId;
 
-    @Column(name = "workout_id")
-    private UUID workoutId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workout_id", nullable = false)
+    private Workout workout;
 
     private int exerciseOrder;
 
