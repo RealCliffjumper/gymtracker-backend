@@ -9,6 +9,7 @@ import com.antonk.gymtracker.repository.WeeklyPlanEntryRepository;
 import com.antonk.gymtracker.repository.WeeklyPlanRepository;
 import com.antonk.gymtracker.repository.WorkoutRepository;
 import com.antonk.gymtracker.service.WeeklyPlanEntryService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,12 +32,6 @@ class WeeklyPlanEntryServiceImpl implements WeeklyPlanEntryService {
                 .stream()
                 .map(EntryDto::fromEntity)
                 .toList();
-    }
-
-    @Override
-    public WeeklyPlanEntry getWeeklyPlanEntry(UUID weeklyPlanEntryId) {
-        return weeklyPlanEntryRepository.findById(weeklyPlanEntryId)
-                .orElseThrow(() -> new AppException("Weekly Plan Entry not found",  HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -72,5 +67,11 @@ class WeeklyPlanEntryServiceImpl implements WeeklyPlanEntryService {
     @Override
     public void deleteWeeklyPlanEntry(UUID weeklyEntryId) {
         weeklyPlanEntryRepository.deleteById(weeklyEntryId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllEntriesByWorkout(UUID workoutId){
+        weeklyPlanEntryRepository.deleteAllByWorkout_WorkoutId(workoutId);
     }
 }

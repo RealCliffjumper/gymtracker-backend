@@ -11,11 +11,11 @@ public interface WeeklyPlanEntryService {
 
     List<EntryDto> getWeeklyPlanEntries(UUID weeklyPlanId);
 
-    WeeklyPlanEntry getWeeklyPlanEntry(UUID weeklyPlanEntryId);
-
     WeeklyPlanEntry updateWeeklyPlanEntry(UUID weeklyPlanEntryId, UUID workoutId);
 
     WeeklyPlanEntry addWeeklyPlanEntry(UUID workoutId, UUID weeklyPlanId, DayOfWeek dayOfWeek);
 
     void deleteWeeklyPlanEntry(UUID weeklyEntryId);
+
+    void deleteAllEntriesByWorkout(UUID workoutId);
 }
