@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface WeeklyPlanRepository extends JpaRepository<WeeklyPlan, UUID> {
-    Optional<WeeklyPlan> findActivePlanByUserId(UUID userId);
+    Optional<WeeklyPlan> findWeeklyPlanByPlanActiveIsAndUserId(boolean planActive, UUID userId);
 
     List<WeeklyPlan> findByUserId(UUID userId);
 }

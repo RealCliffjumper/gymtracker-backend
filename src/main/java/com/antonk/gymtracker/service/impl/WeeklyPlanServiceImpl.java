@@ -32,6 +32,12 @@ class WeeklyPlanServiceImpl implements WeeklyPlanService {
     }
 
     @Override
+    public WeeklyPlan getActivePlan(UUID userId){
+        return weeklyPlanRepository.findWeeklyPlanByPlanActiveIsAndUserId(true, userId)
+                .orElse(null);
+    }
+
+    @Override
     public WeeklyPlan createWeeklyPlan(UUID userId, String weeklyPlanName){
         WeeklyPlan weeklyPlan = new WeeklyPlan(
                 weeklyPlanName

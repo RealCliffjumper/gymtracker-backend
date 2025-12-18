@@ -11,6 +11,7 @@ public interface WeeklyPlanService {
 
     List<WeeklyPlan> getWeeklyPlans (UUID userId);
     WeeklyPlan getWeeklyPlan (UUID planId);
+    WeeklyPlan getActivePlan(UUID userId);
     WeeklyPlan createWeeklyPlan(UUID userId, String planName);
     WeeklyPlan updateWeeklyPlan(UUID weeklyPlanId, PlanUpdateDtoReq  planUpdateDtoReq);
     WeeklyPlan changeWeeklyPlanStatus (UUID weeklyPlanId, PlanStatusDto planStatusDto);

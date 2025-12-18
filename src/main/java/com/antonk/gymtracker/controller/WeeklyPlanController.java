@@ -30,6 +30,11 @@ class WeeklyPlanController {
         return weeklyPlanService.getWeeklyPlan(weeklyPlanId);
     }
 
+    @GetMapping(path ="{userId}/active")
+    public WeeklyPlan getActivePlan(@PathVariable UUID userId) {
+        return weeklyPlanService.getActivePlan(userId);
+    }
+
     @PostMapping(path = "{userId}/create")
     public ResponseEntity<?> createWeeklyPlan(@PathVariable UUID userId, @RequestBody String weeklyPlanName) {
         WeeklyPlan weeklyPlan = weeklyPlanService.createWeeklyPlan(userId, weeklyPlanName);
