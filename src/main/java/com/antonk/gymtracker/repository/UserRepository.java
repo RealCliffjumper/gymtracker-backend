@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByUserLoginId(String userLoginId);
 
-    void  deleteById(UUID userId);
+    void deleteById(UUID userId);
 
 
 }

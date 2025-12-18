@@ -2,6 +2,7 @@ package com.antonk.gymtracker.dto;
 
 import com.antonk.gymtracker.entity.enums.UnitPreference;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public record UserFetchDto(
@@ -9,6 +10,7 @@ public record UserFetchDto(
         String userFirstName,
         String userLastName,
         String userLoginId,
+        LocalDate lastLoggedIn,
         UnitPreference unitPreference
 ) {
 }
