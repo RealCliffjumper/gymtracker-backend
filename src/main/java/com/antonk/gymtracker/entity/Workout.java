@@ -1,5 +1,6 @@
 package com.antonk.gymtracker.entity;
 
+import com.antonk.gymtracker.entity.enums.MuscleGroup;
 import com.antonk.gymtracker.entity.enums.UnitPreference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -39,11 +40,13 @@ public class Workout {
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<WorkoutExercise> exercises = new ArrayList<>();
+    private List<MuscleGroup> muscleGroups = new ArrayList<>();
 
     public Workout(
                 String workoutName,
                 String workoutDescription,
-                LocalDateTime createdAt) {
+                LocalDateTime createdAt,
+                List<MuscleGroup> muscleGroups) {
         this.workoutName = workoutName;
         this.workoutDescription = workoutDescription;
         this.createdAt = LocalDateTime.now();

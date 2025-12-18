@@ -1,6 +1,10 @@
 package com.antonk.gymtracker.dto;
 
-public record WorkoutSetDto(int setNumber,
-                            int reps,
-                            int weight) {
+import java.util.UUID;
+
+public record WorkoutSetDto(
+        UUID setLogId,
+        int setNumber,
+        int reps,
+        int weight) {
 }

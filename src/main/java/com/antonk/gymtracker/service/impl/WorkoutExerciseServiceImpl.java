@@ -42,6 +42,7 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseService {
 
         List<WorkoutSetDto> sets = we.getSets().stream()
                 .map(s -> new WorkoutSetDto(
+                        s.getWorkoutSetId(),
                         s.getSetNumber(),
                         s.getReps(),
                         s.getWeight()))
