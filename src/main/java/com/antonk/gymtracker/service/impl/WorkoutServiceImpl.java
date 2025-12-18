@@ -2,13 +2,9 @@ package com.antonk.gymtracker.service.impl;
 
 import com.antonk.gymtracker.dto.UpdateWorkoutDto;
 import com.antonk.gymtracker.dto.WorkoutDto;
-import com.antonk.gymtracker.dto.WorkoutExerciseDto;
-import com.antonk.gymtracker.entity.User;
 import com.antonk.gymtracker.entity.Workout;
-import com.antonk.gymtracker.entity.WorkoutExercise;
 import com.antonk.gymtracker.exception.AppException;
 import com.antonk.gymtracker.repository.WorkoutRepository;
-import com.antonk.gymtracker.service.WorkoutExerciseService;
 import com.antonk.gymtracker.service.WorkoutService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -26,8 +22,6 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     private WorkoutRepository workoutRepository;
 
-    private WorkoutExerciseService workoutExerciseService;
-
     @Override
     public List<Workout> getUserWorkouts(UUID userId) {
         return workoutRepository.findByUserId(userId);
@@ -43,7 +37,8 @@ public class WorkoutServiceImpl implements WorkoutService {
         Workout workout = new Workout(
                 workoutDto.workoutName(),
                 workoutDto.workoutDescription(),
-                workoutDto.createdAt()
+                workoutDto.createdAt(),
+                workoutDto.muscleGroups()
         );
         workout.setUserId(userId);
         workout.setUpdatedAt(LocalDateTime.now());
@@ -68,6 +63,10 @@ public class WorkoutServiceImpl implements WorkoutService {
         }
 
         return workoutRepository.save(workout);
+    }
+
+    public List<String> findAllPlanNames(UUID workoutId){
+        return workoutRepository.findAllRelatedPlans(workoutId);
     }
 
     @Override

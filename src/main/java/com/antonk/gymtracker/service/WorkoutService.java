@@ -17,6 +17,8 @@ public interface WorkoutService {
 
     Workout updateWorkout(UUID workoutId, UpdateWorkoutDto updateWorkoutDto);
 
+    List<String> findAllPlanNames(UUID workoutId);
+
     void deleteAllUserWorkouts(UUID userId);
 
     void deleteWorkout(UUID workoutId);
