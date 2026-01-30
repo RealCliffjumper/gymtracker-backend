@@ -2,6 +2,7 @@ package com.antonk.gymtracker.controller;
 
 import com.antonk.gymtracker.dto.UpdateWorkoutDto;
 import com.antonk.gymtracker.dto.WorkoutDto;
+import com.antonk.gymtracker.dto.WorkoutsPageDto;
 import com.antonk.gymtracker.entity.Workout;
 import com.antonk.gymtracker.service.WeeklyPlanEntryService;
 import com.antonk.gymtracker.service.WorkoutExerciseService;
@@ -32,7 +33,7 @@ class WorkoutController {
     }
 
     @GetMapping(path = "{userId}/all")
-    public List<Workout> getWorkouts(@PathVariable UUID userId) {
+    public List<WorkoutsPageDto> getWorkouts(@PathVariable UUID userId) {
         return workoutService.getUserWorkouts(userId);
     }
 

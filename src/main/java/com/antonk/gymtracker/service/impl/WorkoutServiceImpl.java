@@ -2,6 +2,7 @@ package com.antonk.gymtracker.service.impl;
 
 import com.antonk.gymtracker.dto.UpdateWorkoutDto;
 import com.antonk.gymtracker.dto.WorkoutDto;
+import com.antonk.gymtracker.dto.WorkoutsPageDto;
 import com.antonk.gymtracker.entity.Workout;
 import com.antonk.gymtracker.exception.AppException;
 import com.antonk.gymtracker.repository.WorkoutRepository;
@@ -23,8 +24,8 @@ public class WorkoutServiceImpl implements WorkoutService {
     private WorkoutRepository workoutRepository;
 
     @Override
-    public List<Workout> getUserWorkouts(UUID userId) {
-        return workoutRepository.findByUserId(userId);
+    public List<WorkoutsPageDto> getUserWorkouts(UUID userId) {
+        return workoutRepository.findWorkoutsByUserId(userId);
     }
 
     public Workout getWorkoutById(UUID workoutId) {
@@ -51,16 +52,10 @@ public class WorkoutServiceImpl implements WorkoutService {
         Workout workout = workoutRepository.findById(workoutId)
                 .orElseThrow(() -> new AppException("Workout not found", HttpStatus.NOT_FOUND));
 
-        boolean noChanges = Objects.equals(workout.getWorkoutName(), updateWorkoutDto.workoutName()) &&
-                Objects.equals(workout.getWorkoutDescription(), updateWorkoutDto.workoutDescription());
-
         workout.setWorkoutName(updateWorkoutDto.workoutName());
         workout.setWorkoutDescription(updateWorkoutDto.workoutDescription());
+        workout.setMuscleGroups(updateWorkoutDto.muscleGroups());
         workout.setUpdatedAt(LocalDateTime.now());
-
-        if (noChanges) {
-            throw new AppException("No changes were made", HttpStatus.NOT_MODIFIED);
-        }
 
         return workoutRepository.save(workout);
     }
