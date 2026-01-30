@@ -147,6 +147,7 @@ class ScheduledWorkoutServiceImpl implements ScheduledWorkoutService {
                 .workoutDescription(sw.getWorkoutNotes())
                 .workoutScheduledDate(sw.getWorkoutScheduledDate())
                 .workoutPoints(sw.getWorkoutPoints())
+                .muscleGroups(sw.getMuscleGroups())
                 .startedAt(sw.getWorkoutStartedAt())
                 .completedAt(sw.getWorkoutCompletedAt())
                 .exercises(exercises)

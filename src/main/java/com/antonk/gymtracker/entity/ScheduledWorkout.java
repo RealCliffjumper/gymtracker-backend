@@ -36,6 +36,7 @@ public class ScheduledWorkout {
     private LocalDateTime workoutStartedAt;
     private LocalDateTime workoutCompletedAt;
     private String workoutNotes;
+    @Enumerated(EnumType.STRING)
     private List<MuscleGroup> muscleGroups;
     private int workoutPoints = 0;
 

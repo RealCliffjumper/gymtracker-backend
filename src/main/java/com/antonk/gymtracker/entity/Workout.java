@@ -40,6 +40,7 @@ public class Workout {
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<WorkoutExercise> exercises = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
     private List<MuscleGroup> muscleGroups = new ArrayList<>();
 
     public Workout(
@@ -50,5 +51,6 @@ public class Workout {
         this.workoutName = workoutName;
         this.workoutDescription = workoutDescription;
         this.createdAt = LocalDateTime.now();
+        this.muscleGroups = muscleGroups;
     }
 }
