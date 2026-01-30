@@ -1,0 +1,79 @@
+package com.antonk.gymtracker.service.impl;
+
+import com.antonk.gymtracker.dto.UpdateWorkoutDto;
+import com.antonk.gymtracker.dto.WorkoutDto;
+import com.antonk.gymtracker.dto.WorkoutsPageDto;
+import com.antonk.gymtracker.entity.Workout;
+import com.antonk.gymtracker.exception.AppException;
+import com.antonk.gymtracker.repository.WorkoutRepository;
+import com.antonk.gymtracker.service.WorkoutService;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+@Service
+@AllArgsConstructor
+public class WorkoutServiceImpl implements WorkoutService {
+
+    private WorkoutRepository workoutRepository;
+
+    @Override
+    public List<WorkoutsPageDto> getUserWorkouts(UUID userId) {
+        return workoutRepository.findWorkoutsByUserId(userId);
+    }
+
+    public Workout getWorkoutById(UUID workoutId) {
+        return workoutRepository.findById(workoutId).orElse(null);
+    }
+
+    @Transactional
+    @Override
+    public Workout createWorkout(UUID userId, WorkoutDto workoutDto) {
+        Workout workout = new Workout(
+                workoutDto.workoutName(),
+                workoutDto.workoutDescription(),
+                workoutDto.createdAt(),
+                workoutDto.muscleGroups()
+        );
+        workout.setUserId(userId);
+        workout.setUpdatedAt(LocalDateTime.now());
+        return workoutRepository.save(workout);
+    }
+
+    @Transactional
+    @Override
+    public Workout updateWorkout(UUID workoutId, UpdateWorkoutDto updateWorkoutDto) {
+        Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new AppException("Workout not found", HttpStatus.NOT_FOUND));
+
+        workout.setWorkoutName(updateWorkoutDto.workoutName());
+        workout.setWorkoutDescription(updateWorkoutDto.workoutDescription());
+        workout.setMuscleGroups(updateWorkoutDto.muscleGroups());
+        workout.setUpdatedAt(LocalDateTime.now());
+
+        return workoutRepository.save(workout);
+    }
+
+    public List<String> findAllPlanNames(UUID workoutId){
+        return workoutRepository.findAllRelatedPlans(workoutId);
+    }
+
+    @Override
+    public void deleteAllUserWorkouts(UUID userId) {
+        List<Workout> workouts = workoutRepository.findByUserId(userId);
+        workoutRepository.deleteAll(workouts);
+    }
+
+    @Override
+    public void deleteWorkout(UUID workoutId) {
+        Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new AppException("Workout not found", HttpStatus.NOT_FOUND));
+        workoutRepository.deleteById(workout.getWorkoutId());
+    }
+}
