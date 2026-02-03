@@ -34,6 +34,10 @@ public class ExerciseServiceImpl implements ExerciseService {
         return exerciseRepository.findAllByIsPublicIsTrueOrderByExerciseNameAsc();
     }
 
+    public List<Exercise> getFiveExercises(UUID userId){
+        return exerciseRepository.findFiveExercisesByUserId(userId);
+    }
+
     @Transactional
     public Exercise createExercise(UUID userId, ExerciseDto exerciseDto){
         Exercise exercise = new Exercise(

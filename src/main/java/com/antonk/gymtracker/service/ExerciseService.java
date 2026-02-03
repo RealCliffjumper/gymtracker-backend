@@ -13,6 +13,8 @@ public interface ExerciseService {
 
     List<Exercise> getExercises();
 
+    List<Exercise> getFiveExercises(UUID userId);
+
     Exercise getExerciseById(UUID exerciseId);
 
     Exercise createExercise(UUID userId, ExerciseDto exerciseDto);

@@ -35,6 +35,11 @@ class ExerciseController {
         return exerciseService.getUserExercises(userId);
     }
 
+    @GetMapping(path = "{userId}/five")
+    public List<Exercise> getFiveExercises(@PathVariable UUID userId) {
+        return exerciseService.getFiveExercises(userId);
+    }
+
     @GetMapping(path = "{exerciseId}/find")
     public Exercise getExercise(@PathVariable UUID exerciseId) {
         return exerciseService.getExerciseById(exerciseId);
