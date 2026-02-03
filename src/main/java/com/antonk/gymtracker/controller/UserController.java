@@ -61,6 +61,13 @@ class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/user/{userId}/theme")
+    public ResponseEntity<?> changeTheme(@PathVariable UUID userId,
+                                         @RequestBody boolean theme) {
+        userService.changeThemePreference(userId, theme);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping(path = "user/delete/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable("userId") UUID userId){

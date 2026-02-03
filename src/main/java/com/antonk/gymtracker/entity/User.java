@@ -31,6 +31,7 @@ public class User implements UserDetails{
     private UnitPreference unitPreference;//kg, lbs
     private LocalDate lastLoggedIn;
     private boolean dataPublic = false;
+    private boolean isThemeDark = false;
 
 
     @Override

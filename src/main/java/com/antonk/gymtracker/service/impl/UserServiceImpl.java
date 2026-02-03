@@ -124,6 +124,17 @@ class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 
+    @Transactional
+    @Override
+    public void changeThemePreference(UUID userId, boolean isThemeDark) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
+
+        user.setThemeDark(isThemeDark);
+        userRepository.save(user);
+    }
+
+    @Transactional
     @Override
     public void deleteUser(UUID userId){
         userRepository.deleteById(userId);

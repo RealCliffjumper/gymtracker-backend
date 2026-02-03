@@ -18,5 +18,7 @@ public interface UserService {
 
     void changePassword(UUID userId, @RequestBody PasswordChangeDto passwordChangeDto);
 
+    void changeThemePreference(UUID userId, boolean isThemeDark);
+
     void deleteUser(UUID userId);
 }
