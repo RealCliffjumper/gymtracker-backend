@@ -32,7 +32,7 @@ public class JWTTokenProvider {
 
     public String generateToken(User user) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + 3600 * 1000);
+        Date validity = new Date(now.getTime() + 3600 * 10000);
 
         return JWT.create()
                 .withIssuer(user.getUserLoginId())
