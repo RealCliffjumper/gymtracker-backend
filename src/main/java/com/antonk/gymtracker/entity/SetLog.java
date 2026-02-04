@@ -31,7 +31,7 @@ public class SetLog {
     private int actualWeight;
     private boolean isCompleted = false;
     private boolean isSkipped = false;
-    private int setPoints = 0;
+    private double setPoints = 0.0;
 
     public SetLog(int i, int reps, int weight) {
     }

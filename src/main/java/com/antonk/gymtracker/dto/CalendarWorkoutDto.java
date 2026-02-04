@@ -20,7 +20,7 @@ public record CalendarWorkoutDto(
         List<MuscleGroup> muscleGroups,
         LocalDateTime startedAt,
         LocalDateTime completedAt,
-        int workoutPoints,
+        double workoutPoints,
         List<ScheduledWorkoutExercise> exercises,
         boolean isVirtual,       // true if just-in-time from plan
         WorkoutStatus status) {

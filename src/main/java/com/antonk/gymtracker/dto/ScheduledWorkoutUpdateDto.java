@@ -13,6 +13,6 @@ public record ScheduledWorkoutUpdateDto(
         LocalDateTime completedAt,
         List<MuscleGroup> muscleGroups,
         List<ScheduledExerciseUpdateDto> exercises,
-        int workoutPoints
+        double workoutPoints
 ) {
 }

@@ -38,7 +38,7 @@ public class ScheduledWorkout {
     private String workoutNotes;
     @Enumerated(EnumType.STRING)
     private List<MuscleGroup> muscleGroups;
-    private int workoutPoints = 0;
+    private double workoutPoints = 0.0;
 
     @Enumerated(EnumType.STRING)
     private WorkoutStatus workoutStatus;

@@ -7,7 +7,7 @@ public record SetLogUpdateDto(
         int setNumber,
         int actualReps,
         int actualWeight,
-        int setPoints,
+        double setPoints,
         boolean toDelete,
         boolean toComplete,
         boolean toSkip
